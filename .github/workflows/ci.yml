@@ -64,3 +64,5 @@ jobs:
           file: ${{ matrix.service }}/Dockerfile
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/3tier-${{ matrix.service }}:latest
+
+          #just a comment to deploy
