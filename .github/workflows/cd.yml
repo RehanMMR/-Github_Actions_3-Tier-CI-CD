@@ -30,6 +30,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         run: |
+          cd "$GITHUB_WORKSPACE"
           docker compose pull
           docker compose down
           docker compose up -d --remove-orphans
