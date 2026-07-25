@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Tier 3: PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: three_tier_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-notesdb}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Tier 2: Backend REST API
+  backend:
+    build:
+      context: ./backend
+    container_name: three_tier_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-notesdb}
+    depends_on:
+      - db
+
+  # Tier 1: Frontend Web
+  frontend:
+    build:
+      context: ./frontend
+    container_name: three_tier_frontend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
