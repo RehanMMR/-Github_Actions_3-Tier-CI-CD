@@ -12,6 +12,10 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
 
+    # ✅ Fail clearly after 5 minutes if no runner is connected
+    # Instead of hanging forever in a queue
+    timeout-minutes: 5
+
     steps:
       - name: Checkout Code on EC2
         uses: actions/checkout@v4
